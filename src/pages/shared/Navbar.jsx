@@ -6,14 +6,26 @@ import { AuthContext } from "../../components/providers/AuthProvider";
 
 const Navbar = () => {
 
-    const {logOut} = useContext(AuthContext);
+    const { logOut, user, loading } = useContext(AuthContext);
+
+    if(loading){
+        return <p>coming</p>
+    }
 
     const navItems = <>
         <li><Link to={'/'}>Home</Link></li>
         <li><Link to={'/about'}>About</Link></li>
-        <li><Link to={'/login'}>Login</Link></li>
-        <li><Link to={'/signup'}>Sign up</Link></li>
-        <li><button onClick={logOut} className="">Sign Out</button></li>
+        {
+            user?.email ?
+                <>
+                <li><button onClick={logOut} className="">Sign Out</button></li>
+                <li><Link to={'/bookings'}>My Bookings</Link></li>
+                </>
+                : <div className="flex gap-2">
+                    <li><Link to={'/login'}>Login</Link></li>
+                    <li><Link to={'/signup'}>Sign up</Link></li>
+                </div>
+        }
     </>
     return (
         <div className="navbar bg-base-100 h-30">
@@ -27,11 +39,11 @@ const Navbar = () => {
                     </ul>
                 </div>
                 <Link to={'/'}>
-                <img src={logo} alt="" /></Link>
+                    <img src={logo} alt="" /></Link>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
-                   {navItems}
+                    {navItems}
                 </ul>
             </div>
             <div className="navbar-end">
